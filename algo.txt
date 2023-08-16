@@ -1,0 +1,63 @@
+---> GOODREADS algorithm <---
+1. Startproject and startapp
+2. Models:
+    - modellar yoziladi, stars uchun MinMaxValue validatorlar qoshiladi -> psql ulanadi
+    - adminka uchun admin.py configure qilinadi
+3. Templates 
+    - (agar template hech bir appga aloqador bolmasa, project rootga qoyish mumkin)
+    - create app - users. Userga oid templatelar bir joyda turishi uchun
+    - landing, register, login pagelar ochish. RegisterView orqali register pageni shakllantirish (User.objects.create)
+    - forms.py orqali bir qancha if yozib otirmasdan ishni hal qilamiz
+    - faqat frontdagi validationlar yetarli emas, sababi ularni osongina ozgartirish mumkin. Shu sabab post() metodi ichida .is_valid() orqali validate qilinishi shakllantirish. -> Lekin view ichiga .save() yozishdan kora forms.py da .save metod qilish yaxshiroq. buning uchun self.cleaned_data[] ishlatiladi, yani validate qilingan toza datani qabul qilish uchun
+    - Undan ham osoni: ModelForm orqali xuddi serializer yozgandek qilish. Faqat password hash qilishi uchun .save() override qilinishi zarur.
+4. Registration Tests + Middleware
+    - reverse() - Test yozganda url "users/register" korinishida hardcode yozilgandan kora reverse("users:register) qilish jinja kod kabi efficientdir.
+    - goodreads/middleware.py: Middleware sample code copy from django doc
+5. Login & Tests
+    - Form yasash, Viewda post() metod. cleaned_data() o'rniga AuthenticationForm() ishlatish
+    - User info match bo'lgach, yangi session ochib sessionid ni cookiega saqlash kerak. Bu ham common bolgani uchun login() funksiyasi ishlab chiqilgan!
+    - login() ishlatish uchun request va user kerak, userni esa get_user() orqali olamiz. (self.user_cache orqali olib keladi)
+    - tests.py: is_authenticated yordamida auth qilingani tekshiriladi
+6. Book List and Detail
+    - Doimgidek views/urls boyicha list va detail yoziladi
+    - Test uchun esa assertContains(response, "message") 
+    - The 
+
+
+
+
+
+
+
+
+
+
+
+
+
+""" Quyidagi holat barchasini qo'lda yozib chiqishni ta'minlaydi, lekin yuqorida ModelForm orqali osonroq qilish mumkin """
+
+# class UserCreateForm(forms.Form):
+#     username = forms.CharField(max_length=150)
+#     email = forms.EmailField()
+#     first_name = forms.CharField(max_length=150)
+#     last_name = forms.CharField(max_length=150)
+#     password = forms.CharField(max_length=128)
+
+#     def save(self):
+#         username = self.cleaned_data['username']
+#         first_name = self.cleaned_data['first_name']
+#         last_name = self.cleaned_data['last_name']
+#         email = self.cleaned_data['email']
+#         password = self.cleaned_data['password']
+
+#         # Views.py dagi request.POST bu yerda olib bolmaydi, shu sabab uning orniga self.cleaned_data[] ishlatiladi
+
+#         user = User.objects.create(
+#             username=username,
+#             first_name=first_name,
+#             last_name=last_name,
+#             email=email
+#             )
+#         user.set_password(password)
+#         user.save()
