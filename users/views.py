@@ -1,10 +1,14 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import UserCreateForm, UserLoginForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+
+def landing_page(request):
+    return render(request, "landing.html")
 
 class RegisterView(View):
     def get(self, request):
@@ -42,6 +46,21 @@ class LoginView(View):
             user = login_form.get_user()
             login(request, user)
 
-            return redirect("landing_page")
+            return redirect("users:landing_page")
         else:
             return render(request, 'users/login.html', {'login_form':login_form})
+        
+
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, "users/profile.html", {"user":request.user})
+    
+        # if not request.user.is_authenticated:
+        #     return redirect("users:login")
+        # Shu ishni tayyor mixin orqali qilish mumkin
+        
+
+class LogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        return redirect("users:landing_page")

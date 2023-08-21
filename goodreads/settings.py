@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# LoginRequiredMixin avtomatik tarzda accounts/login ga redirect qiladi, bizga esa users/login kerak
+LOGIN_URL = "users:login"
+
 
 # Application definition
 
@@ -81,7 +84,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'goodreads',
-        'HOST': '0.0.0.0',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
         'USER': 'postgres',
         'PASSWORD': 'sam0704@'

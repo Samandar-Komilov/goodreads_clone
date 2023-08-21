@@ -21,7 +21,10 @@
 6. Book List and Detail
     - Doimgidek views/urls boyicha list va detail yoziladi
     - Test uchun esa assertContains(response, "message") 
-    - The 
+7. Profile page
+    - Profile page uchun html>views>urls yasaldi. LoginRequired uchun test qilib tekshirildi va oxirida buni avtomatlashtirish uchun LoginRequiredMixin qo'shildi. Settingsda esa LOGIN_URL configure qilinadi
+8. Logout va Messages
+    - 
 
 
 
