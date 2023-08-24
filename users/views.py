@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserCreateForm, UserLoginForm
+from .forms import UserCreateForm, UserLoginForm, UserUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
@@ -67,3 +67,21 @@ class LogoutView(LoginRequiredMixin, View):
         logout(request)
         messages.info(request, "You have succesfully logged out!")
         return redirect("users:landing_page")
+    
+
+class ProfileEditView(LoginRequiredMixin, View):
+    def get(self, request):
+        user_update_form = UserUpdateForm(instance=request.user) # Qaysi userni change qilmoqchi ekani
+        return render(request, "users/profile_edit.html", {'form':user_update_form})
+    
+    def post(self, request):
+        user_update_form = UserUpdateForm(instance=request.user, data=request.POST)
+        
+        if user_update_form.is_valid():
+            user_update_form.save()
+            messages.success(request, "You have successfully changed credentials!")
+        
+            return redirect("users:profile")
+        
+        else:
+            return render(request, "users/profile_edit.html", {"form":user_update_form})

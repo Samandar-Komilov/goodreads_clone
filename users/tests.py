@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.urls import reverse
 from django.contrib.auth import get_user
 
@@ -16,7 +16,7 @@ class RegistrationTestCase(TestCase):
             }
         )
 
-        user = User.objects.get(username="yannmartel")
+        user = CustomUser.objects.get(username="yannmartel")
         self.assertEqual(user.first_name, "Yann")
         self.assertEqual(user.last_name, "Martel")
         self.assertEqual(user.email, "yannmartel@gmail.com")
@@ -33,7 +33,7 @@ class RegistrationTestCase(TestCase):
         )
 
         # Bu test db dagi userlar sonini sanaydi, tabiiyki u 0.
-        user_count = User.objects.count()
+        user_count = CustomUser.objects.count()
 
         self.assertEqual(user_count, 0)
         # Response ichida kelayotgan formani tekshiramiz. Bunda "form" - views.py da post metod uchun context sifatida chiqarilgan variable. formdagi usernamening errori shunday bolishiga test qilyapmiz
@@ -52,7 +52,7 @@ class RegistrationTestCase(TestCase):
             }
         )
 
-        user_count = User.objects.count()
+        user_count = CustomUser.objects.count()
         self.assertEqual(user_count, 0)
         self.assertFormError(response, "form", "email", "Enter a valid email address.")
 
@@ -68,7 +68,7 @@ class RegistrationTestCase(TestCase):
         #         "password":"thththtrh"
         #     }
         # )
-        user = User.objects.create(username='yannmartel', first_name="Yann")
+        user = CustomUser.objects.create(username='yannmartel', first_name="Yann")
         user.set_password("somepass")
         user.save()
         
@@ -82,7 +82,7 @@ class RegistrationTestCase(TestCase):
                 "password":"thththtrh"
             }
         )
-        user_count = User.objects.count()
+        user_count = CustomUser.objects.count()
         self.assertEqual(user_count, 1)
 
         self.assertFormError(response2, "form", "username", "A user with that username already exists.")
@@ -91,7 +91,7 @@ class RegistrationTestCase(TestCase):
 class LoginTestCase(TestCase):
     # DRY principle is working - setUp() 
     def setUp(self):
-        self.db_user = User.objects.create(username="test", first_name="Samandar")
+        self.db_user = CustomUser.objects.create(username="test", first_name="Samandar")
         self.db_user.set_password("test11")
         self.db_user.save()
     
@@ -151,7 +151,7 @@ class ProfileTestCase(TestCase):
         # Login qilmagan user profile page kirmoqchi bolsa uni loginga redirect qilishini test qilyapmiz
         
     def test_profile_details(self):
-        user = User.objects.create(
+        user = CustomUser.objects.create(
             username="samandar07", first_name="Samandar", last_name="Komilov", email="skomilov@gmail.com"
         )
         user.set_password("somepass")
@@ -164,3 +164,27 @@ class ProfileTestCase(TestCase):
         self.assertContains(response, user.first_name)
         self.assertContains(response, user.last_name)
         self.assertContains(response, user.email)
+        
+    def test_profile_update(self):
+        user = CustomUser.objects.create(
+            username="samandar07", first_name="Samandar", last_name="Komilov", email="skomilov@gmail.com"
+        )
+        user.set_password("somepass")
+        user.save()
+        self.client.login(username="samandar07", password="somepass")
+        
+        response = self.client.post(
+            reverse("users:profile-update"),
+            data={
+                "username":"samandar_komilov",
+                "first_name":"Samandar",
+                "last_name":"Komilov",
+                "email":"komilovs@gmail.com"
+            }
+        )
+        
+        user.refresh_from_db()  # Oxirgi changelarni dbda avtomatik refresh qiladi
+        
+        self.assertEqual(user.last_name, "Komilov")
+        self.assertEqual(user.email, "komilovs@gmail.com")
+        self.assertEqual(response.url, reverse("users:profile"))
