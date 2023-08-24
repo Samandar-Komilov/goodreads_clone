@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .forms import UserCreateForm, UserLoginForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 
 def landing_page(request):
@@ -46,7 +47,8 @@ class LoginView(View):
             user = login_form.get_user()
             login(request, user)
 
-            return redirect("users:landing_page")
+            messages.success(request, "You have successfully logged in!")
+            return redirect("books:list")
         else:
             return render(request, 'users/login.html', {'login_form':login_form})
         
@@ -63,4 +65,5 @@ class ProfileView(LoginRequiredMixin, View):
 class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
+        messages.info(request, "You have succesfully logged out!")
         return redirect("users:landing_page")

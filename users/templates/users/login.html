@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Login Page{% endblock title %}
+
+{% block content %}
     <h1>Login Page</h1>
+
     <p>
         <form method="post">
+            <p>No account? <a href="{% url 'users:register' %}">Register</a></p>
             {% csrf_token %}
             {{login_form.as_p}}
             <button type="submit">Login</button>
         </form>
     <p>
-</body>
-</html>
+
+{% endblock content %}

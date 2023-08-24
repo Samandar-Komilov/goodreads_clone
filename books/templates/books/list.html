@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books Page</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Books Page{% endblock title %}
+
+{% block content %}
     
     <h1>Books</h1>
+
+    {% if messages %}
+    {% for message in messages %}
+        <span class="{{message.tags}}">{{message}}</span>
+    {% endfor %}
+    {% endif %}
 
     {% if books %}
     <ul>
@@ -18,5 +21,5 @@
     {% else %}
     No books found.
     {% endif %}
-</body>
-</html>
+
+{% endblock content %}

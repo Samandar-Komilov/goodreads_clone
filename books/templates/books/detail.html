@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books Page</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Book Detail page{% endblock title %}
     
-    <h1>Books Detail Page</h1>
+{% block content %}
+
+    <h1>Book Detail Page</h1>
 
     <h3>{{book.title}}</h3>
     <p>{{book.description}}</p>
-</body>
-</html>
+
+{% endblock content %}
