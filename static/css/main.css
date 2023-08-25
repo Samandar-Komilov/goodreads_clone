@@ -1,0 +1,10 @@
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.cover-pic {
+  width: 150px;
+  height: 230px;
+}

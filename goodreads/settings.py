@@ -130,6 +130,13 @@ AUTH_USER_MODEL = "users.CustomUser"
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# Agar butun project uchun bitta static folder ochsak, u holda shu kabi dirs berish kerak
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = "media-files"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -26,10 +26,14 @@
 8. Logout va Messages + Bootstrap setup
     - Logout uchun alohida page va Messages yordamida inform qilish imkoniyati qo'shildi. 
     - Bootstrap ulandi va deyarli barcha templatelar "odambashara" ko'rinishga keltirildi.
-9. Profile Update
+9. Profile Update + Custom User + Profile Picture
     - ProfileUpdateView va formalar yozildi. Tekshirish uchun test case ham.
-    - 
-
+    - users.models da CustomUser yasaldi. DB butunlay delete qilinib, yangidan ochildi
+    - Profile Picture Pillow va ImageField yordamida qo'shildi, forms.py va profile_edit qismlari ozgardi, media bilan birga
+10. Static Files + Generic Views + Crispy Forms
+    - Static folderini xoh project levelda qoyish (STATICFILES_DIRS) xoh app levelda qoyish mumkin
+    - ListView va DetailView yordamida Generic View yozdik
+    - Formaga ham stil berish kerak, lekin biz uni django forms yordamida qilganimiz uchun oddiy bootstrap ishlata olmaymiz. 
 
 
 

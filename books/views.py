@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import ListView, DetailView
 from .models import Book
 
 def landing_page(request):
@@ -8,11 +9,23 @@ def landing_page(request):
     return render(request, "landing.html")
 
 
-class BookView(View):
-    def get(self, request):
-        books = Book.objects.all()
+# Generic Views
+class BookView(ListView):
+    template_name = "books/list.html"
+    context_object_name = "books"
+    queryset = Book.objects.all()
 
-        return render(request, "books/list.html", {"books":books})
+# class BookView(View):
+#     def get(self, request):
+#         books = Book.objects.all()
+
+#         return render(request, "books/list.html", {"books":books})
+
+
+class BookDetailView(DetailView):
+    template_name = "books/detail.html"
+    pk_url_kwarg = "id"
+    model = Book
 
 
 class BookDetailView(View):

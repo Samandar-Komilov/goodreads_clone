@@ -5,6 +5,8 @@
 {% block content %}
   <h1>Profile Page</h1>
 
+  <img class="profile-pic" alt="Profile Picture" src="{{user.profile_picture.url}}"></img>
+
   <p><a href="{% url 'users:profile-update' %}">Update Profile</a></p>
 
   <p>Username: {{user.username}}</p>
